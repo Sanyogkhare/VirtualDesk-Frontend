@@ -1,11 +1,10 @@
 import axios from "axios";
 
-// Base URL from .env
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // backend ka base URL from .env
+  baseURL: import.meta.env.VITE_API_URL, // env se baseURL
 });
 
-// Agar token localStorage me hai to har request ke saath bhejna
+// Token attach karna
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
   if (token) {
