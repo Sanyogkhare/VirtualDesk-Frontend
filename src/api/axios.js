@@ -1,7 +1,8 @@
 import axios from "axios";
 
+// Base URL from .env
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // backend ka base URL
+  baseURL: import.meta.env.VITE_API_URL, // backend ka base URL from .env
 });
 
 // Agar token localStorage me hai to har request ke saath bhejna

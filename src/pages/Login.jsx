@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import API from "../api/axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [status, setStatus] = useState("");
-const navigate=useNavigate()
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -12,15 +14,18 @@ const navigate=useNavigate()
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/auth/login", formData);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/auth/login`,
+        formData
+      );
 
-      // token ko localStorage me save karna
+      // Token ko localStorage me save karna
       localStorage.setItem("token", res.data.token);
 
       setStatus("Login successful!");
-      console.log("succesfull");
-      navigate("/dashboard")
-      
+      console.log("Login successful");
+      navigate("/dashboard");
+
       setFormData({ email: "", password: "" });
     } catch (err) {
       setStatus(err.response?.data?.message || "Invalid credentials");
@@ -33,8 +38,12 @@ const navigate=useNavigate()
         onSubmit={handleSubmit}
         className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96 space-y-4"
       >
-        <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">Login</h2>
-        {status && <p className="text-center text-sm text-red-500">{status}</p>}
+        <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+          Login
+        </h2>
+        {status && (
+          <p className="text-center text-sm text-red-500">{status}</p>
+        )}
         <input
           type="email"
           name="email"

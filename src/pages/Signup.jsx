@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import toast from "react-hot-toast";
-import API from "../api/axios";
+import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 const schema = z.object({
@@ -13,13 +13,17 @@ const schema = z.object({
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data) => {
     try {
-      await API.post("/auth/signup", data);
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, data);
       toast.success("Signup successful 🎉");
       navigate("/login"); // redirect to login after signup
     } catch (err) {
@@ -30,35 +34,43 @@ export default function Signup() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">Create Account</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
+          Create Account
+        </h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <input 
+            <input
               {...register("name")}
               placeholder="Name"
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
           </div>
 
           <div>
-            <input 
+            <input
               {...register("email")}
               placeholder="Email"
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+            )}
           </div>
 
           <div>
-            <input 
+            <input
               type="password"
               {...register("password")}
               placeholder="Password"
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+            )}
           </div>
 
           <button
@@ -72,7 +84,10 @@ export default function Signup() {
 
         <p className="text-sm text-gray-600 dark:text-gray-300 mt-4 text-center">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 dark:text-blue-400 hover:underline">
+          <Link
+            to="/login"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+          >
             Login
           </Link>
         </p>
